@@ -1,13 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* You can add minimal global styles below if needed */
-body {
-  @apply bg-gray-100 text-gray-800 font-sans transition-colors duration-300;
+:root {
+  --bg: #070810;
+  --surface: #0d0f1a;
+  --card: #111421;
+  --elevated: #181c2e;
+  --border: rgba(255,255,255,0.055);
+  --border-hover: rgba(255,255,255,0.11);
+  --accent: #3dd68c;
+  --accent-glow: rgba(61,214,140,0.18);
+  --accent-dim: rgba(61,214,140,0.07);
+  --accent-border: rgba(61,214,140,0.22);
+  --blue: #6ea8fe;
+  --blue-dim: rgba(110,168,254,0.08);
+  --blue-border: rgba(110,168,254,0.2);
+  --text: #e8ecf8;
+  --text-2: #7a87a0;
+  --text-3: #363d52;
+  --error: #f87171;
+  --error-dim: rgba(248,113,113,0.08);
+  --r: 8px;
+  --r-lg: 12px;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --sans: 'Space Grotesk', system-ui, sans-serif;
 }
 
-.dark body {
-  @apply bg-gray-950 text-gray-100;
+.light {
+  --bg: #f0f2f8;
+  --surface: #ffffff;
+  --card: #f7f8fc;
+  --elevated: #eceef6;
+  --border: rgba(0,0,0,0.07);
+  --border-hover: rgba(0,0,0,0.14);
+  --accent: #16a34a;
+  --accent-glow: rgba(22,163,74,0.14);
+  --accent-dim: rgba(22,163,74,0.06);
+  --accent-border: rgba(22,163,74,0.22);
+  --blue: #2563eb;
+  --blue-dim: rgba(37,99,235,0.07);
+  --blue-border: rgba(37,99,235,0.2);
+  --text: #0c0e18;
+  --text-2: #4a5568;
+  --text-3: #9ca3b8;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
 }
 

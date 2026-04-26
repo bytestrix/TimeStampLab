@@ -1,143 +1,183 @@
-import { useState, useEffect } from 'react';
-import { Calendar } from 'lucide-react';
-import CopyButton from './CopyButton';
+import { useState } from 'react';
+import { getRelativeTime } from '../utils/timeUtils';
 
-export default function TimeCalculator() {
-    // Set default values
-    const defaultBase = new Date();
-    defaultBase.setMinutes(0, 0, 0); // round to the hour
-    const defaultBaseStr = defaultBase.toISOString().slice(0, 16);
-    const [baseTime, setBaseTime] = useState(defaultBaseStr);
-    const [operation, setOperation] = useState('add');
-    const [amount, setAmount] = useState('5');
-    const [unit, setUnit] = useState('hours');
-    const [result, setResult] = useState<null | { date: string; unix: number; iso: string }>(null);
-
-    const calculateTime = () => {
-        if (!baseTime || !amount) return;
-
-        const base = new Date(baseTime);
-        const num = Number(amount);
-        let multiplier = 1;
-
-        switch (unit) {
-            case 'seconds': multiplier = 1000; break;
-            case 'minutes': multiplier = 60 * 1000; break;
-            case 'hours': multiplier = 60 * 60 * 1000; break;
-            case 'days': multiplier = 24 * 60 * 60 * 1000; break;
-        }
-
-        const change = num * multiplier * (operation === 'add' ? 1 : -1);
-        const newTime = new Date(base.getTime() + change);
-
-        setResult({
-            date: newTime.toLocaleString(),
-            unix: Math.floor(newTime.getTime() / 1000),
-            iso: newTime.toISOString()
-        });
+function useCopy() {
+    const [key, setKey] = useState<string | null>(null);
+    const copy = (text: string, id: string) => {
+        try { navigator.clipboard.writeText(text); } catch (_) { }
+        setKey(id);
+        setTimeout(() => setKey(null), 1600);
     };
+    return [key, copy] as const;
+}
 
-    // Calculate result on mount and whenever inputs change
-    useEffect(() => {
-        calculateTime();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [baseTime, operation, amount, unit]);
-
+function CopyBtn({ text, id, ckey, copy }: { text: string; id: string; ckey: string | null; copy: (text: string, id: string) => void }) {
+    const ok = ckey === id;
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4 md:p-6 min-h-[420px]">
-            <div className="flex items-center gap-2 mb-6">
-                <Calendar className="text-purple-500" size={24} />
-                <h2 className="text-xl md:text-2xl font-bold dark:text-white">Time Calculator</h2>
-            </div>
+        <button className={`btn-copy ${ok ? 'ok' : ''}`} onClick={() => copy(text, id)}>
+            {ok ? '✓ Copied' : 'Copy'}
+        </button>
+    );
+}
 
-            <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Base Date & Time</label>
-                        <input
-                            type="datetime-local"
-                            value={baseTime}
-                            onChange={(e) => setBaseTime(e.target.value)}
-                            className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-100"
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Operation</label>
-                            <select
-                                value={operation}
-                                onChange={(e) => setOperation(e.target.value)}
-                                className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-100"
-                            >
-                                <option value="add">Add</option>
-                                <option value="subtract">Subtract</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Amount</label>
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                placeholder="e.g., 5"
-                                className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-100"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Unit</label>
-                        <select
-                            value={unit}
-                            onChange={(e) => setUnit(e.target.value)}
-                            className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-100"
-                        >
-                            <option value="seconds">Seconds</option>
-                            <option value="minutes">Minutes</option>
-                            <option value="hours">Hours</option>
-                            <option value="days">Days</option>
-                        </select>
-                    </div>
-
-                    <button
-                        onClick={calculateTime}
-                        className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors font-semibold"
-                    >
-                        Calculate
-                    </button>
-                </div>
-
-                {result && (
-                    <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-lg p-4 space-y-3">
-                        <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">Result</h3>
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">Local Date</p>
-                                    <p className="font-semibold dark:text-white">{result.date}</p>
-                                </div>
-                                <CopyButton text={result.date} label="date" />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">Unix Timestamp</p>
-                                    <p className="font-mono font-semibold dark:text-white">{result.unix}</p>
-                                </div>
-                                <CopyButton text={result.unix.toString()} label="timestamp" />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">ISO String</p>
-                                    <p className="font-mono text-sm dark:text-white">{result.iso}</p>
-                                </div>
-                                <CopyButton text={result.iso} label="ISO string" />
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+function RRow({ label, value, id, ckey, copy, hi, blue }: { label: string; value: string; id: string; ckey: string | null; copy: (text: string, id: string) => void; hi?: boolean; blue?: boolean }) {
+    if (!value) return null;
+    return (
+        <div className="rrow">
+            <span className="rlabel">{label}</span>
+            <span className={`rval ${hi ? 'hi' : blue ? 'blue' : ''}`}>{value}</span>
+            <CopyBtn text={value} id={id} ckey={ckey} copy={copy} />
         </div>
     );
-} 
+}
+
+function NowBtn({ label, onClick }: { label: string; onClick: () => void }) {
+    return <button className="btn btn-ghost" onClick={onClick}>{label}</button>;
+}
+
+const UNITS_MAP: Record<string, number> = {
+    seconds: 1000,
+    minutes: 60000,
+    hours: 3600000,
+    days: 86400000,
+    weeks: 604800000,
+    months: 2629800000,
+    years: 31557600000,
+};
+
+export default function TimeCalculator() {
+    const [base, setBase] = useState('');
+    const [op, setOp] = useState('+');
+    const [amount, setAmount] = useState('5');
+    const [unit, setUnit] = useState('hours');
+    const [ckey, copy] = useCopy();
+
+    const toMs = (raw: string): number | null => {
+        const s = raw.trim();
+        if (!s) return null;
+        if (s.includes('-') || s.includes('T') || s.includes('/')) {
+            const d = new Date(s);
+            return isNaN(d.getTime()) ? null : d.getTime();
+        }
+        const n = parseFloat(s);
+        if (isNaN(n)) return null;
+        const detectUnit = Math.abs(n) > 2e12 ? 'ms' : 's';
+        return detectUnit === 'ms' ? n : n * 1000;
+    };
+
+    const baseMs = base.trim() ? toMs(base.trim()) : null;
+    const baseOk = baseMs !== null && !isNaN(baseMs);
+    const amt = parseFloat(amount);
+    const amtOk = !isNaN(amt) && amt >= 0;
+
+    let resultMs = null;
+    if (baseOk && amtOk) {
+        const delta = amt * UNITS_MAP[unit];
+        resultMs = op === '+' ? baseMs + delta : baseMs - delta;
+    }
+
+    return (
+        <div>
+            <div className="card">
+                <div className="card-hd"><span className="card-title">Base Date / Timestamp</span></div>
+                <div style={{ display: 'flex', gap: '7px', alignItems: 'center' }}>
+                    <input
+                        className={`inp ${base && !baseOk ? 'err' : ''}`}
+                        value={base}
+                        onChange={e => setBase(e.target.value)}
+                        placeholder="Unix timestamp, ISO date, or YYYY-MM-DD..."
+                    />
+                    <NowBtn label="Now" onClick={() => setBase(String(Math.floor(Date.now() / 1000)))} />
+                </div>
+                {baseOk && <p className="hint">= {new Date(baseMs).toLocaleString()}</p>}
+                {base && !baseOk && <p className="hint" style={{ color: 'var(--error)' }}>Invalid — try a Unix timestamp or ISO date</p>}
+            </div>
+
+            <div className="card">
+                <div className="card-hd"><span className="card-title">Add or Subtract</span></div>
+                <div style={{ display: 'flex', gap: '7px', alignItems: 'center', flexWrap: 'wrap' }}>
+                    {['+', '−'].map((o, i) => {
+                        const val = i === 0 ? '+' : '-';
+                        return (
+                            <button
+                                key={val}
+                                className={`op-btn ${op === val ? 'active' : ''}`}
+                                onClick={() => setOp(val)}
+                            >
+                                {o}
+                            </button>
+                        );
+                    })}
+                    <input
+                        type="number"
+                        min="0"
+                        value={amount}
+                        onChange={e => setAmount(e.target.value)}
+                        style={{
+                            width: '90px',
+                            fontFamily: 'var(--mono)',
+                            background: 'var(--bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: 'var(--r)',
+                            padding: '8px 11px',
+                            fontSize: '12px',
+                            color: 'var(--text)',
+                            outline: 'none'
+                        }}
+                        onFocus={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--accent)';
+                            e.currentTarget.style.boxShadow = '0 0 0 3px var(--accent-dim)';
+                        }}
+                        onBlur={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                            e.currentTarget.style.boxShadow = 'none';
+                        }}
+                    />
+                    <select
+                        value={unit}
+                        onChange={e => setUnit(e.target.value)}
+                        style={{
+                            background: 'var(--bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: 'var(--r)',
+                            padding: '8px 11px',
+                            fontFamily: 'var(--sans)',
+                            fontSize: '12px',
+                            color: 'var(--text)',
+                            outline: 'none',
+                            cursor: 'pointer'
+                        }}
+                        onFocus={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--accent)';
+                            e.currentTarget.style.boxShadow = '0 0 0 3px var(--accent-dim)';
+                        }}
+                        onBlur={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                            e.currentTarget.style.boxShadow = 'none';
+                        }}
+                    >
+                        {Object.keys(UNITS_MAP).map(u => <option key={u} value={u}>{u}</option>)}
+                    </select>
+                </div>
+                {baseOk && amtOk && (
+                    <p className="hint" style={{ marginTop: 10 }}>
+                        {op === '+' ? `${amount} ${unit} after` : `${amount} ${unit} before`} the base date
+                    </p>
+                )}
+            </div>
+
+            {resultMs !== null && (
+                <div className="card">
+                    <div className="card-hd"><span className="card-title">Result</span></div>
+                    <div className="results">
+                        <RRow label="ISO 8601" value={new Date(resultMs).toISOString()} id="c_iso" ckey={ckey} copy={copy} />
+                        <RRow label="Local" value={new Date(resultMs).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'medium' })} id="c_loc" ckey={ckey} copy={copy} />
+                        <RRow label="Relative" value={getRelativeTime(new Date(resultMs))} id="c_rel" ckey={ckey} copy={copy} hi />
+                        <RRow label="Unix (s)" value={String(Math.floor(resultMs / 1000))} id="c_s" ckey={ckey} copy={copy} blue />
+                        <RRow label="Unix (ms)" value={String(resultMs)} id="c_ms" ckey={ckey} copy={copy} blue />
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
