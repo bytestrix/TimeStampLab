@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "build:app": "vite build",
+    "build:app": "npx vite build",
     "dev": "vite",
     "test": "turbo run test",
     "lint": "turbo run lint",
