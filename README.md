@@ -64,6 +64,9 @@ npm install timestamplab-core
 
 # CLI tools
 npm install -g timestamplab-cli
+
+# Interactive world map (React)
+npm install timestamplab-map
 ```
 
 ## API
@@ -143,6 +146,29 @@ const results = batchProcess(['1777187459', '1777273859', 'invalid']);
 
 const csv = exportToCSV(results);  // Export to CSV string
 ```
+
+## Interactive Map
+
+```bash
+npm install timestamplab-map
+```
+
+```tsx
+import { WorldMap } from 'timestamplab-map';
+
+function App() {
+  return (
+    <WorldMap
+      onCityClick={(city) => console.log(city.name, city.tz)}
+      onCountryClick={(country, cities) => console.log(country.name, cities)}
+      selectedTz="Asia/Kolkata"
+      userCountry="India"
+    />
+  );
+}
+```
+
+Features: 175 countries, 80+ city dots, hover tooltips with live time, click to select, zero dependencies, pure SVG.
 
 ## CLI
 
@@ -232,6 +258,7 @@ npm run test
 
 - **timestamplab-core** - Core utilities
 - **timestamplab-cli** - Command-line tools
+- **timestamplab-map** - Interactive world map React component
 
 ## License
 

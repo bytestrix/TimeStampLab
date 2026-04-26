@@ -1,9 +1,6 @@
-/**
- * @timestamplab/map
- * Interactive world map for timezone visualization
- */
+export { default as WorldMap } from './WorldMap';
+export { MAP_CITIES, MULTI_TZ_COUNTRIES } from './cities';
+export { project, unproject, pointInGeometry } from './mapUtils';
 
-export { TimezoneMap } from './TimezoneMap';
-export { TimezoneInfo } from './TimezoneInfo';
-
-export type { TimezoneMapProps, TimezoneInfoProps } from './types';
+export type { CityOption } from './cities';
+export type { CountryFeature } from './countryData';
