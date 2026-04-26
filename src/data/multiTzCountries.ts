@@ -31,7 +31,7 @@ export const MULTI_TZ_COUNTRIES: Record<string, CityOption[]> = {
   'Canada': [
     { name: 'Toronto',       tz: 'America/Toronto',     lat: 43.65,  lng: -79.38 },
     { name: 'Winnipeg',      tz: 'America/Winnipeg',    lat: 49.90,  lng: -97.14 },
-    { name: 'Calgary',       tz: 'America/Edmonton',    lat: 51.05,  lng: -114.07 },
+    { name: 'Edmonton',      tz: 'America/Edmonton',    lat: 51.05,  lng: -114.07 },
     { name: 'Vancouver',     tz: 'America/Vancouver',   lat: 49.25,  lng: -123.12 },
     { name: 'Halifax',       tz: 'America/Halifax',     lat: 44.65,  lng: -63.57 },
     { name: "St. John's",    tz: 'America/St_Johns',    lat: 47.56,  lng: -52.71 },
@@ -60,7 +60,7 @@ export const MULTI_TZ_COUNTRIES: Record<string, CityOption[]> = {
   ],
   'Indonesia': [
     { name: 'Jakarta',       tz: 'Asia/Jakarta',        lat: -6.21,  lng: 106.85 },
-    { name: 'Bali',          tz: 'Asia/Makassar',       lat: -8.34,  lng: 115.09 },
+    { name: 'Makassar',      tz: 'Asia/Makassar',       lat: -5.13,  lng: 119.42 },
     { name: 'Jayapura',      tz: 'Asia/Jayapura',       lat: -2.53,  lng: 140.72 },
   ],
   'Mexico': [
@@ -78,7 +78,7 @@ export const MULTI_TZ_COUNTRIES: Record<string, CityOption[]> = {
     { name: 'Hovd',          tz: 'Asia/Hovd',           lat: 48.01,  lng: 91.64 },
   ],
   'China': [
-    { name: 'Beijing',       tz: 'Asia/Shanghai',       lat: 39.91,  lng: 116.39 },
+    { name: 'Shanghai',      tz: 'Asia/Shanghai',       lat: 31.23,  lng: 121.47 },
     { name: 'Urumqi',        tz: 'Asia/Urumqi',         lat: 43.80,  lng: 87.60 },
   ],
 };
@@ -155,9 +155,9 @@ export const MAP_CITIES: CityOption[] = [
   { name: 'Bangkok',       tz: 'Asia/Bangkok',                       lat: 13.75,  lng: 100.52 },
   { name: 'Singapore',     tz: 'Asia/Singapore',                     lat: 1.35,   lng: 103.82 },
   { name: 'Jakarta',       tz: 'Asia/Jakarta',                       lat: -6.21,  lng: 106.85 },
-  { name: 'Bali',          tz: 'Asia/Makassar',                      lat: -8.34,  lng: 115.09 },
+  { name: 'Makassar',      tz: 'Asia/Makassar',                      lat: -5.13,  lng: 119.42 },
   { name: 'Jayapura',      tz: 'Asia/Jayapura',                      lat: -2.53,  lng: 140.72 },
-  { name: 'Beijing',       tz: 'Asia/Shanghai',                      lat: 39.91,  lng: 116.39 },
+  { name: 'Shanghai',      tz: 'Asia/Shanghai',                      lat: 31.23,  lng: 121.47 },
   { name: 'Urumqi',        tz: 'Asia/Urumqi',                        lat: 43.80,  lng: 87.60 },
   { name: 'Tokyo',         tz: 'Asia/Tokyo',                         lat: 35.69,  lng: 139.69 },
   { name: 'Seoul',         tz: 'Asia/Seoul',                         lat: 37.57,  lng: 126.98 },
