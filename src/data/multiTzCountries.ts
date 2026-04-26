@@ -143,7 +143,7 @@ export const MAP_CITIES: CityOption[] = [
   { name: 'Johannesburg',  tz: 'Africa/Johannesburg',                lat: -26.20, lng: 28.04 },
   { name: 'Casablanca',    tz: 'Africa/Casablanca',                  lat: 33.59,  lng: -7.62 },
   // Asia (one per country)
-  { name: 'Mumbai',        tz: 'Asia/Kolkata',                       lat: 19.08,  lng: 72.88 },
+  { name: 'Kolkata',       tz: 'Asia/Kolkata',                       lat: 22.57,  lng: 88.36 },
   { name: 'Karachi',       tz: 'Asia/Karachi',                       lat: 24.86,  lng: 67.01 },
   { name: 'Dhaka',         tz: 'Asia/Dhaka',                         lat: 23.72,  lng: 90.41 },
   { name: 'Colombo',       tz: 'Asia/Colombo',                       lat: 6.93,   lng: 79.85 },
