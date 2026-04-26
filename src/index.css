@@ -30,6 +30,7 @@
   --map-ocean: #070c14;
   --map-land: #1a2235;
   --map-hover: #2a4a6b;
+  --map-user: #1e3a2f;
   --map-border: #070c14;
 }
 
@@ -53,6 +54,7 @@
   --map-ocean: #dde8f5;
   --map-land: #b8cce0;
   --map-hover: #6ea8fe;
+  --map-user: #bbf7d0;
   --map-border: #dde8f5;
 }
 
